@@ -19,5 +19,3 @@ WTFFFFFFFFFFFFFF
 - 地区：China
 
 ---
-
-⭐ 欢迎查看我们的仓库，发现感兴趣的项目可以点个 star！
