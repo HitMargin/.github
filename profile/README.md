@@ -31,3 +31,4 @@ WTFFFFFFFFFFFFFF
 
 </div>
 
+![Metrics](https://github.com/HitMargin/.github/blob/main/metrics.svg)
