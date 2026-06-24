@@ -21,6 +21,7 @@ jobs:
           template: classic
           filename: metrics.svg
           base: header, activity, repositories, metadata
+          output_action: artifacts
         
           # 语言插件（支持组织+限定仓库）
           plugin_languages: yes
