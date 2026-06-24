@@ -19,9 +19,15 @@ WTFFFFFFFFFFFFFF
 - 地区：China
 
 ---
+
+<p>
+  <a href="https://community.vaunt.dev/board/HitMargin">
+    <img src="https://api.vaunt.dev/v1/github/entities/HitMargin/contributors?limit=15&format=svg" width="350" />
+  </a>
+</p>
 <div align="center">
 
-[![Star History Chart](https://api.star-history.com/svg?repos=HitMargin/Il2Cpp_Dumper, HitMargin/BaseMacro, HitMargin/AsyncInput&type=Date)](https://github.com/HitMargin?tab=repositories)
+[![Star History Chart](https://api.star-history.com/svg?repos=HitMargin/Il2Cpp_Dumper,HitMargin/BaseMacro,HitMargin/AsyncInput,HitMargin/UMMBridge,HitMargin/TemplateModMenu&type=Date)](https://github.com/HitMargin?tab=repositories)
 
 </div>
 
