@@ -18,14 +18,37 @@ jobs:
         with:
           token: ${{ secrets.METRICS_TOKEN }}
           user: HitMargin
-          # ↓↓↓ 删除 config: metrics.config.yml，改成下面的内联配置 ↓↓↓
-          
-          # 基础配置
           template: classic
           filename: metrics.svg
           
-          # 插件配置（直接在 with 里写）
+          # 基础模块 (轻量)
+          base: header, activity, repositories, metadata
+          
+          # 1. 贡献日历 - 展示组织整体活跃度 (非常美观)
+          plugin_isocalendar: yes
+          plugin_isocalendar_duration: half-year
+          
+          # 2. 语言 - 突出他们的技术栈 (C++, C#)
           plugin_languages: yes
-          plugin_stars: yes
-          plugin_contributors: yes
-          # 更多插件按需开启...
+          # 关键：限制为目标仓库，避免扫描全部100个且消耗过多API
+          plugin_languages_repositories: HitMargin/Il2Cpp_Dumper, HitMargin/BaseMacro, HitMargin/AsyncInput, HitMargin/UMMBridge
+          plugin_languages_limit: 6
+          plugin_languages_threshold: 0%
+          
+          # 3. 流量 - 显示哪些项目被关注 (需要 repo 权限)
+          plugin_traffic: yes
+          
+          # 4. 许可证 - 显示开源合规性
+          plugin_licenses: yes
+          plugin_licenses_ratio: yes
+          
+          # 5. 跟进 - 显示活跃的 Issue/PR
+          plugin_followup: yes
+          
+          # 明确关闭错误的插件
+          plugin_contributors: no
+          plugin_stars: no
+          plugin_people: no
+          
+          # 优化配额
+          repositories_batch: 1000
