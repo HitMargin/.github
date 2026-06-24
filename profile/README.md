@@ -21,7 +21,7 @@ WTFFFFFFFFFFFFFF
 ---
 <div align="center">
 
-[![Star History Chart](https://api.star-history.com/svg?repos=HitMargin/&type=Date)](https://github.com/HitMargin?tab=repositories)
+[![Star History Chart](https://api.star-history.com/svg?repos=HitMargin/Il2Cpp_Dumper, HitMargin/BaseMacro, HitMargin/AsyncInput&type=Date)](https://github.com/HitMargin?tab=repositories)
 
 </div>
 
