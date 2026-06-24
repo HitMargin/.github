@@ -1,0 +1,11 @@
+# metrics.config.yml
+# 指定目标为用户/组织
+user: HitMargin
+
+# 选择经典模板
+template: classic
+
+# 开启你想要的插件
+plugin_languages: yes               # 显示编程语言分布
+plugin_stars: yes                   # 显示星标情况
+plugin_contributors: yes            # 显示贡献者
