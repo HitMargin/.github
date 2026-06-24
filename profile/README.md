@@ -19,3 +19,19 @@ WTFFFFFFFFFFFFFF
 - 地区：China
 
 ---
+
+# 📊 Status
+<table>
+  <tr>
+    <td align="center" valign="top">
+<img src="https://github-readme-stats-one-bice.vercel.app/api/top-langs/?username=HitMargin&layout=compact&langs_count=6" />
+    </td>
+  </tr>
+</table>
+
+<div align="center">
+
+[![Star History Chart](https://api.star-history.com/svg?repos=HitMargin/Il2Cpp_Dumper,HitMargin/BaseMacro,HitMargin/AsyncInput,HitMargin/UMMBridge,HitMargin/TemplateModMenu&type=Date&theme=dark)](https://github.com/HitMargin?tab=repositories)
+
+</div>
+
