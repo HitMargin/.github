@@ -20,35 +20,27 @@ jobs:
           user: HitMargin
           template: classic
           filename: metrics.svg
-          
-          # 基础模块 (轻量)
           base: header, activity, repositories, metadata
-          
-          # 1. 贡献日历 - 展示组织整体活跃度 (非常美观)
-          plugin_isocalendar: yes
-          plugin_isocalendar_duration: half-year
-          
-          # 2. 语言 - 突出他们的技术栈 (C++, C#)
+        
+          # 语言插件（支持组织+限定仓库）
           plugin_languages: yes
-          # 关键：限制为目标仓库，避免扫描全部100个且消耗过多API
-          plugin_languages_repositories: HitMargin/Il2Cpp_Dumper, HitMargin/BaseMacro, HitMargin/AsyncInput, HitMargin/UMMBridge
           plugin_languages_limit: 6
           plugin_languages_threshold: 0%
-          
-          # 3. 流量 - 显示哪些项目被关注 (需要 repo 权限)
+        
+          # 尝试 traffic（可能支持）
           plugin_traffic: yes
-          
-          # 4. 许可证 - 显示开源合规性
-          plugin_licenses: yes
-          plugin_licenses_ratio: yes
-          
-          # 5. 跟进 - 显示活跃的 Issue/PR
+        
+          # 尝试 followup（可能支持）
           plugin_followup: yes
-          
-          # 明确关闭错误的插件
+        
+          # 关闭不支持的
+          plugin_isocalendar: no
+          plugin_licenses: no
           plugin_contributors: no
           plugin_stars: no
+          plugin_habits: no
           plugin_people: no
+          # 其他都设 no
           
           # 优化配额
           repositories_batch: 1000
