@@ -1,0 +1,23 @@
+# .github/workflows/metrics.yml
+name: Generate Metrics
+on:
+  schedule:
+    - cron: '0 0 * * *'  # 每天 UTC 0点自动更新
+  workflow_dispatch:     # 允许手动触发
+  push:
+    branches: [ "main" ] # 推送代码到 main 分支时触发
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Generate Metrics
+        uses: lowlighter/metrics@latest
+        with:
+          token: ${{ secrets.METRICS_TOKEN }}
+          # 关键：指定你的组织名
+          user: HitMargin
+          # 配置文件，下一步创建
+          config: metrics.config.yml
