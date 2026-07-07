@@ -17,4 +17,4 @@ WTFFFFFFFFFFFFFF
 
 </div>
 
-![Metrics](https://github.com/HitMargin/.github/blob/main/metrics.svg)
+![Metrics](https://raw.githubusercontent.com/HitMargin/.github/main/metrics.svg)
