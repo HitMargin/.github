@@ -1,11 +1,11 @@
-# .github/workflows/metrics.yml
 name: Generate Metrics
+
 on:
   schedule:
     - cron: '0 0 * * *'
   workflow_dispatch:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build:
@@ -13,8 +13,6 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
       - name: Generate Metrics
         uses: lowlighter/metrics@latest
         with:
@@ -22,27 +20,33 @@ jobs:
           user: HitMargin
           template: classic
           filename: metrics.svg
+
+          # 自动排成两列(桌面端),避免竖排堆叠
+          config_display: columns
+          config_timezone: Asia/Shanghai
+
           base: header, activity, repositories, metadata
-        
-          # 语言插件（支持组织+限定仓库）
+
+          # 语言占比(组织账号支持)
           plugin_languages: yes
           plugin_languages_limit: 6
           plugin_languages_threshold: 0%
-        
-          # 尝试 traffic（可能支持）
+
+          # 代码增删行数(组织账号支持)
+          plugin_lines: yes
+          plugin_lines_sections: base
+
+          # 组织简介
+          plugin_introduction: yes
+
+          # 仓库流量数据(已验证组织账号可用)
           plugin_traffic: yes
-        
-          # 尝试 followup（可能支持）
+
+          # issue / PR 整体状态(已验证组织账号可用)
           plugin_followup: yes
-        
-          # 关闭不支持的
-          plugin_isocalendar: no
-          plugin_licenses: no
-          plugin_contributors: no
-          plugin_stars: no
-          plugin_habits: no
-          plugin_people: no
-          # 其他都设 no
-          
-          # 优化配额
-          repositories_batch: 1000
+
+          # 组织 Projects 看板(需要指定具体项目,先占位,没有就删掉这三行)
+          # plugin_projects: yes
+          # plugin_projects_repositories: adofaiex/xxx/projects/1
+
+          repositories_batch: 100
