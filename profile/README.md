@@ -2,8 +2,6 @@
 
 WTFFFFFFFFFFFFFF
 
-主要关注 **ADOFAI（A Dance of Fire and Ice）** 相关的模组开发、逆向工程，以及一些底层工具的编写，包括 Hook、输入模拟、Il2Cpp 逆向等方向。
-
 ## 📫 联系方式
 
 - 邮箱：hitmargin@qq.com / hitmargin@Outlook.com
