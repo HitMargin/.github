@@ -6,6 +6,8 @@ My personal debugging projects and temporary projects usually get moved to the a
 
 我个人的调试项目 临时项目 最终版通常会转移到adofaiex组织或者我的个人账户
 
+[@adofaiex](https://github.com/adofaiex) [@HitMargin](https://github.com/HitMargin) 
+
 ## 📫 联系方式
 
 - 邮箱：hitmargin@qq.com / hitmargin@Outlook.com
