@@ -2,6 +2,9 @@
 
 日暮
 
+My personal debugging projects and temporary projects usually get moved to the adofaiex organization or my personal account for the final version.
+我个人的调试项目 临时项目 最终版通常会转移到adofaiex组织或者我的个人账户
+
 ## 📫 联系方式
 
 - 邮箱：hitmargin@qq.com / hitmargin@Outlook.com
