@@ -18,6 +18,7 @@ jobs:
         uses: lowlighter/metrics@latest
         with:
           token: ${{ secrets.METRICS_TOKEN }}
+          committer_token: ${{ secrets.METRICS_PAT || github.token }}
           user: HitMargin
           template: classic
           filename: metrics-left.svg
@@ -31,6 +32,7 @@ jobs:
         uses: lowlighter/metrics@latest
         with:
           token: ${{ secrets.METRICS_TOKEN }}
+          committer_token: ${{ secrets.METRICS_PAT || github.token }}
           user: HitMargin
           template: classic
           filename: metrics-right.svg
