@@ -13,15 +13,20 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       # 左栏:基础信息 + 组织简介
       - name: Generate Metrics (left)
         uses: lowlighter/metrics@latest
         with:
           token: ${{ secrets.METRICS_TOKEN }}
-          committer_token: ${{ secrets.METRICS_PAT || github.token }}
           user: HitMargin
           template: classic
           filename: metrics-left.svg
+          output_action: none
           config_timezone: Asia/Shanghai
           base: header, repositories, metadata
           plugin_introduction: yes
@@ -32,10 +37,10 @@ jobs:
         uses: lowlighter/metrics@latest
         with:
           token: ${{ secrets.METRICS_TOKEN }}
-          committer_token: ${{ secrets.METRICS_PAT || github.token }}
           user: HitMargin
           template: classic
           filename: metrics-right.svg
+          output_action: none
           config_timezone: Asia/Shanghai
           base: ""
           plugin_languages: yes
@@ -43,6 +48,32 @@ jobs:
           plugin_languages_threshold: 0%
           plugin_followup: yes
 
-          # 组织 Projects 看板(需要指定具体项目,先占位,没有就删掉这三行)
-          # plugin_projects: yes
-          # plugin_projects_repositories: adofaiex/xxx/projects/1
+      # 用 SSH 签名提交:署名归本人 + 绿色 Verified 徽章
+      - name: Commit and push (SSH signed)
+        run: |
+          set -euo pipefail
+
+          mkdir -p "$HOME/.ssh"
+          printf '%s' "${{ secrets.METRICS_SIGNING_KEY_B64 }}" | base64 -d > "$HOME/.ssh/signing_key"
+          chmod 600 "$HOME/.ssh/signing_key"
+
+          git config user.name "HitMargin"
+          git config user.email "2228293026@qq.com"
+          git config gpg.format ssh
+          git config user.signingkey "$HOME/.ssh/signing_key"
+          git config commit.gpgsign true
+
+          # docker 以 root 写入,需要 sudo 取回
+          shopt -s nullglob
+          for f in /metrics_renders/*.svg; do
+            sudo cp -f "$f" .
+            sudo chown "$(id -u):$(id -g)" "$(basename "$f")"
+          done
+
+          git add --all
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update metrics [skip ci]"
+            git push
+          fi
