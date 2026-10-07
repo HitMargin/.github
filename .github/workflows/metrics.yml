@@ -7,6 +7,11 @@ on:
   push:
     branches: ["main"]
 
+# 防止并发运行互相抢推送
+concurrency:
+  group: metrics-main
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -62,6 +67,7 @@ jobs:
           git config gpg.format ssh
           git config user.signingkey "$HOME/.ssh/signing_key"
           git config commit.gpgsign true
+          git config pull.rebase true
 
           # docker 以 root 写入,需要 sudo 取回
           shopt -s nullglob
@@ -73,7 +79,19 @@ jobs:
           git add --all
           if git diff --cached --quiet; then
             echo "No changes to commit"
-          else
-            git commit -m "Update metrics [skip ci]"
-            git push
+            exit 0
           fi
+
+          git commit -m "Update metrics [skip ci]"
+
+          # 推送前先同步,避免并发导致的 non-fast-forward
+          for attempt in 1 2 3; do
+            if git push; then
+              echo "Pushed on attempt $attempt"
+              exit 0
+            fi
+            echo "Push rejected, rebasing and retrying ($attempt)..."
+            git pull --rebase --autostash
+          done
+          echo "::error::Failed to push after 3 attempts"
+          exit 1
