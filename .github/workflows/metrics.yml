@@ -1,4 +1,4 @@
-name: Generate Metrics
+name: Generate Metrics & Contributor Graph
 
 on:
   schedule:
@@ -6,17 +6,25 @@ on:
   workflow_dispatch:
   push:
     branches: ["main"]
+    paths-ignore:                      # 图表文件更新不触发本 workflow，切断自触发链
+      - 'metrics-left.svg'
+      - 'metrics-right.svg'
+      - 'HitMargin.svg'
+      - 'HitMargin.html'
+      - 'hitmargin.svg'                # 兜底：防止工具输出小写文件名导致自触发
+      - 'hitmargin.html'
 
-# 防止并发运行互相抢推送
+permissions:
+  contents: write
+
+# ★ 全局串行，同一时间只允许一个 run 操作 main
 concurrency:
-  group: metrics-main
+  group: metrics-and-contributor-graph
   cancel-in-progress: false
 
 jobs:
-  build:
+  metrics:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -94,4 +102,85 @@ jobs:
             git pull --rebase --autostash
           done
           echo "::error::Failed to push after 3 attempts"
+          exit 1
+
+  contributor-graph:
+    needs: metrics                    # ★ 等 metrics 全部 push 完再开始
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0              # rebase 需要完整历史
+
+      - name: Sync with remote and generate SVG
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          git reset --hard origin/main
+          docker run --rm \
+            -v "$PWD:/work" \
+            -w /work \
+            -e GITHUB_TOKEN=${{ secrets.METRICS_TOKEN }} \
+            ghcr.io/ewels/contributor-graphs HitMargin --sort commits 2>&1 | tee output.log
+
+      - name: List files
+        run: |
+          ls -la
+          find . -maxdepth 1 \( -name "*.svg" -o -name "*.html" \) -type f
+
+      # ★ 同样用 SSH 签名提交，保持全仓库提交身份一致
+      - name: Commit and push (SSH signed, with retry)
+        run: |
+          set -euo pipefail
+
+          mkdir -p "$HOME/.ssh"
+          printf '%s' "${{ secrets.METRICS_SIGNING_KEY_B64 }}" | base64 -d > "$HOME/.ssh/signing_key"
+          chmod 600 "$HOME/.ssh/signing_key"
+
+          git config user.name "HitMargin"
+          git config user.email "2228293026@qq.com"
+          git config gpg.format ssh
+          git config user.signingkey "$HOME/.ssh/signing_key"
+          git config commit.gpgsign true
+          git config pull.rebase true
+
+          # 清理 Docker 运行日志，避免被误提交
+          rm -f output.log
+
+          # 精确添加 contributor graph 产物（排除 metrics-*）
+          shopt -s nullglob
+          added=0
+          for f in *.svg *.html; do
+            case "$f" in
+              metrics-left.svg|metrics-right.svg) continue ;;
+            esac
+            git add "$f"
+            added=1
+          done
+
+          if [ "$added" -eq 0 ]; then
+            echo "::error::No contributor graph output found, aborting"
+            exit 1
+          fi
+
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+
+          git commit -m "📊 update contributor graph [skip ci]"
+
+          # ★ 重试兜底：即使有未知并发，也能最终 push 成功
+          for i in 1 2 3 4 5; do
+            if git push origin main; then
+              echo "Push succeeded"
+              exit 0
+            fi
+            echo "Push rejected, retry $i/5..."
+            git pull --rebase origin main || git rebase --abort
+            sleep $((i * 3))
+          done
+
+          echo "::error::Push failed after retries"
           exit 1
