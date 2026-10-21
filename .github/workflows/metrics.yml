@@ -19,7 +19,7 @@ permissions:
 
 # ★ 全局串行，同一时间只允许一个 run 操作 main
 concurrency:
-  group: metrics-and-contributor-graph
+  group: metrics-main
   cancel-in-progress: false
 
 jobs:
