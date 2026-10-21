@@ -13,7 +13,7 @@
 
 <div align="center">
 
-![Contributors](https://raw.githubusercontent.com/HitMargin/.github/main/adofaiex.svg)
+![Contributors](https://raw.githubusercontent.com/HitMargin/.github/main/HitMargin.svg)
 
 </div>
 
